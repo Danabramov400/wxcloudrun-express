@@ -7,10 +7,19 @@ const { init: initDB, Counter } = require("./db");
 const logger = morgan("tiny");
 
 const app = express();
+
+const expressWs = require('express-ws')(app);
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
 app.use(logger);
+
+app.ws('/', function(ws, req) {
+  ws.on('message', function(msg) {
+    ws.send(msg);
+  });
+});
 
 // 首页
 app.get("/", async (req, res) => {
