@@ -17,7 +17,7 @@ app.use(logger);
 
 app.ws('/', function(ws, req) {
   ws.on('message', function(msg) {
-    ws.send(msg);
+    ws.send(`后端收到消息：${msg}`);
   });
 });
 
