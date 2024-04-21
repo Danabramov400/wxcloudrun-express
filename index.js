@@ -15,11 +15,20 @@ app.use(express.json());
 app.use(cors());
 app.use(logger);
 
+var connections = [];
 app.ws('/', function(ws, req) {
+  connections.push(ws);
   ws.on('message', function(msg) {
-    ws.send(`后端收到消息：${msg}`);
+    broadcast(`后端收到消息：${msg}`);
   });
 });
+
+function broadcast(message){
+  connections.forEach((ws)=>{
+    //if the connections are objects with info use something like ws.ws.send()
+    ws.send(message)
+  })
+}
 
 // 首页
 app.get("/", async (req, res) => {
